@@ -3,6 +3,7 @@ package com.example.weatherapp
 import android.annotation.SuppressLint
 import android.Manifest.permission.*
 import android.content.pm.PackageManager
+import android.location.Address
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -14,6 +15,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import android.location.Geocoder
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private var weatherForecast: WeatherForecast? = null
@@ -54,10 +58,11 @@ class MainActivity : AppCompatActivity() {
         val minMaxTempView: TextView = findViewById(R.id.minMaxTemperature)
         val currentWeather: TextView = findViewById(R.id.currentWeather)
         val dailyForecast: RecyclerView = findViewById(R.id.dailyForecast)
+        val currentCity: TextView = findViewById(R.id.cityName)
 
         dailyForecast.layoutManager = LinearLayoutManager(this)
         dailyForecast.adapter = weatherForecast?.dailyForecast?.let { ForecastAdapter(it) }
-
+        currentCity.setText(latitude?.let { longitude?.let { it1 -> getCurrentCityName(it.toDouble(), it1.toDouble()) } })
         weatherForecast?.getCurrentTemperature()?.toString().let { currentTempView.setText(it) }
         weatherForecast?.getMinMaxTemperature().let { minMaxTempView.setText(it) }
         weatherForecast?.getCurrentWeather().let { currentWeather.setText(it) }
@@ -65,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getCurrentData() {
-
         val retrofit = Retrofit.Builder()
             .baseUrl(BaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -79,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 response: Response<WeatherResponse>
             ) {
                 if (response.code() == 200) {
-                    var currentData = response.body()!!
+                    val currentData = response.body()!!
                     weatherForecast = WeatherForecast(currentData.current, currentData.daily)
                     initView()
                 }
@@ -88,6 +92,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         )
+    }
+
+    private fun getCurrentCityName(latitude: Double, longitude: Double): String{
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)
+        return addresses[0].locality
     }
 
     companion object {

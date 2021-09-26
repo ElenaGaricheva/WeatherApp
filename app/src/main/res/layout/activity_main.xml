@@ -29,7 +29,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="10"
             android:textSize="90sp"
             android:textColor="@color/smog_white"
             />
@@ -46,7 +45,6 @@
             android:id="@+id/minMaxTemperature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="8 / -3"
             android:gravity="center_horizontal"
             android:textSize="24sp"
             android:textColor="@color/transparent_smog_white" />
@@ -54,7 +52,6 @@
             android:id="@+id/currentWeather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Clouds"
             android:gravity="center_horizontal"
             android:textSize="24sp"
             android:textColor="@color/transparent_smog_white" />
@@ -74,7 +71,6 @@
             android:id="@+id/cityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Moscow"
             android:gravity="center_horizontal"
             android:textSize="20sp"
             android:textColor="@color/smog_white"
