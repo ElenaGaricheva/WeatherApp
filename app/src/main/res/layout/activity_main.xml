@@ -20,15 +20,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="3">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <TextView
             android:id="@+id/currentTemperature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="5"
             android:gravity="center_horizontal"
-            android:textSize="100sp"
+            android:text="10"
+            android:textSize="90sp"
             android:textColor="@color/smog_white"
             />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="\u00B0"
+                android:textSize="40sp"
+                android:textColor="@color/smog_white"
+                android:gravity="top"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/minMaxTemperature"
             android:layout_width="match_parent"
@@ -36,7 +49,7 @@
             android:text="8 / -3"
             android:gravity="center_horizontal"
             android:textSize="24sp"
-            android:textColor="@color/smog_white" />
+            android:textColor="@color/transparent_smog_white" />
         <TextView
             android:id="@+id/currentWeather"
             android:layout_width="match_parent"
@@ -44,7 +57,7 @@
             android:text="Clouds"
             android:gravity="center_horizontal"
             android:textSize="24sp"
-            android:textColor="@color/smog_white" />
+            android:textColor="@color/transparent_smog_white" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/currentCity"

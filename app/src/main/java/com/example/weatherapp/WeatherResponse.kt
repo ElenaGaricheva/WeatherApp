@@ -41,7 +41,7 @@ class Current {
     @SerializedName("visibility")
     var visibility: String? = null
     @SerializedName("weather")
-    var weather: List<Weather> = listOf()
+    var weather: Weather? = null
     @SerializedName("wind_deg")
     var windDeg: Int = 0
     @SerializedName("wind_gust")
