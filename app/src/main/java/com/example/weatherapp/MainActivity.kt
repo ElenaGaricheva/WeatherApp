@@ -21,14 +21,14 @@ class MainActivity : AppCompatActivity() {
             .build()
             .create(WeatherService::class.java)
 
-        val call = retrofit.getCurrentWeather(city, AppId)
+        val call = retrofit.getCurrentWeather(55.7522f,37.6156f, exclude, AppId)
         call.enqueue(object : Callback<WeatherResponse> {
             override fun onResponse(
                 call: Call<WeatherResponse>,
                 response: Response<WeatherResponse>
             ) {
                 if (response.code() == 200) {
-                    val weatherResponse = response.body()
+                    var weatherResponse = response.body()!!
                 }
             }
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
@@ -38,8 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        var BaseUrl = "http://api.openweathermap.org"
+        var BaseUrl = "https://api.openweathermap.org"
         var AppId = "a568bd37f06c1bcd1ceeae9be4e359ee"
-        var city = "Moscow"
+        var cnt = 7
+        var exclude = listOf("minutely", "hourly", "alerts")
     }
 }
