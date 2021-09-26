@@ -5,8 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import java.sql.Date
-import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class ForecastAdapter(private val dailyForecast: List<Daily>) :
     RecyclerView.Adapter<ForecastAdapter.MyViewHolder>() {
@@ -39,11 +40,6 @@ class ForecastAdapter(private val dailyForecast: List<Daily>) :
         return dailyForecast.size
     }
 
-    private fun convertDate(date: Long): String {
-        val stamp = Timestamp(date)
-        return Date(stamp.time).toString()
-    }
-
     private fun getTempForecast(temp: Temp): String {
         val iconCelsius = "\u00B0"
         val minTemp = temp.min?.let { convertKelvinsToCelsius(it) }
@@ -54,5 +50,14 @@ class ForecastAdapter(private val dailyForecast: List<Daily>) :
     private fun convertKelvinsToCelsius(temp: Float): Int{
         val kelvinsTemp: Float = 273.15F
         return temp.minus(kelvinsTemp).toInt()
+    }
+
+    private fun convertDate(date: Long): String {
+        val localDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(date), ZoneId.systemDefault())
+        val dayOfWeek = localDate.dayOfWeek
+        val dayOfMonth = localDate.dayOfMonth
+        val month = localDate.month
+        return dayOfWeek.toString().substring(0, 3) + ", " +
+                dayOfMonth.toString() + " " + month.toString().substring(0, 3)
     }
 }
