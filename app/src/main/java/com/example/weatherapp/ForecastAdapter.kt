@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.sql.Date
+import java.sql.Timestamp
 
-class ForecastAdapter(val dailyForecast: List<Daily>) :
+class ForecastAdapter(private val dailyForecast: List<Daily>) :
     RecyclerView.Adapter<ForecastAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var date: TextView? = null
@@ -25,9 +27,32 @@ class ForecastAdapter(val dailyForecast: List<Daily>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val date = dailyForecast.get(position).dt.toLong().let { convertDate(it) }
+        val temp = dailyForecast.get(position).temp?.let { getTempForecast(it) }
+
+        holder.date?.text = date
+        holder.temperature?.text = temp
+
     }
 
     override fun getItemCount(): Int {
         return dailyForecast.size
+    }
+
+    private fun convertDate(date: Long): String {
+        val stamp = Timestamp(date)
+        return Date(stamp.time).toString()
+    }
+
+    private fun getTempForecast(temp: Temp): String {
+        val iconCelsius = "\u00B0"
+        val minTemp = temp.min?.let { convertKelvinsToCelsius(it) }
+        val maxTemp = temp.max?.let { convertKelvinsToCelsius(it) }
+        return maxTemp.toString() + iconCelsius + " / " + minTemp.toString() + iconCelsius
+    }
+
+    private fun convertKelvinsToCelsius(temp: Float): Int{
+        val kelvinsTemp: Float = 273.15F
+        return temp.minus(kelvinsTemp).toInt()
     }
 }

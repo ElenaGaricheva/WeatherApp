@@ -23,7 +23,7 @@ class Current {
     @SerializedName("dew_point")
     var dewPoint: Float? = 0.toFloat()
     @SerializedName("dt")
-    var dt: Float = 0.toFloat()
+    var dt: Long? = null
     @SerializedName("humidity")
     var humidity: Float = 0.toFloat()
     @SerializedName("pressure")
@@ -41,7 +41,7 @@ class Current {
     @SerializedName("visibility")
     var visibility: String? = null
     @SerializedName("weather")
-    var weather: Weather? = null
+    var weather: List<Weather> = listOf()
     @SerializedName("wind_deg")
     var windDeg: Int = 0
     @SerializedName("wind_gust")

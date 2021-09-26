@@ -17,7 +17,7 @@ class WeatherForecast(
     }
 
     fun getCurrentWeather(): String? {
-        return currentWeather?.weather?.main
+        return currentWeather?.weather?.get(0)?.main
     }
 
     private fun convertKelvinsToCelsius(temp: Float): Int{

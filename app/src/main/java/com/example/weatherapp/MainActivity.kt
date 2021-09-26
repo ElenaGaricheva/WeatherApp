@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val dailyForecast: RecyclerView = findViewById(R.id.dailyForecast)
 
         dailyForecast.layoutManager = LinearLayoutManager(this)
+        dailyForecast.adapter = weatherForecast?.dailyForecast?.let { ForecastAdapter(it) }
 
         weatherForecast?.getCurrentTemperature()?.toString().let { currentTempView.setText(it) }
         weatherForecast?.getMinMaxTemperature().let { minMaxTempView.setText(it) }
