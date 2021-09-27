@@ -24,7 +24,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:constraint_referenced_ids="date, icon, temperature"
+            app:constraint_referenced_ids="date, weather, temperature"
             app:flow_wrapMode="chain"
             app:flow_horizontalBias="0"
             app:flow_horizontalStyle="spread_inside"
@@ -32,34 +32,40 @@
 
         <TextView
             android:id="@+id/date"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Sat, 26 Sep"
             android:textSize="16sp"
             android:textColor="@color/smog_white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/icon"
+            app:layout_constraintEnd_toStartOf="@id/weather"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            android:gravity="start|center"
             />
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/weather"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/smog_white"
+            android:gravity="center"
             app:layout_constraintEnd_toStartOf="@id/temperature"
             app:layout_constraintStart_toEndOf="@id/date"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_weight="1" />
         <TextView
             android:id="@+id/temperature"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="11 / -4"
             android:textSize="16sp"
             android:textColor="@color/smog_white"
+            app:layout_constraintHorizontal_weight="1"
+            android:gravity="end|center"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
