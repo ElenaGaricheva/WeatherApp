@@ -2,12 +2,12 @@ package com.example.weatherapp
 
 import android.annotation.SuppressLint
 import android.Manifest.permission.*
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,6 +67,11 @@ class MainActivity : AppCompatActivity() {
         weatherForecast?.getMinMaxTemperature().let { minMaxTempView.setText(it) }
         weatherForecast?.getCurrentWeather().let { currentWeather.setText(it) }
 
+        currentCity.setOnClickListener{
+            val citySearch = Intent()
+            citySearch.setClass(this, SearchCity::class.java)
+            startActivity(citySearch)
+        }
     }
 
     private fun getCurrentData() {
