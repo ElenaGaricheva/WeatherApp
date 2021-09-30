@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 class WeatherResponse {
@@ -61,7 +62,7 @@ class Weather {
     var icon: String? = null
 }
 
-class Daily {
+class Daily{
     @SerializedName("clouds")
     var clouds: Int = 0
     @SerializedName("dew_point")

@@ -32,7 +32,7 @@ class ForecastAdapter(private val dailyForecast: List<Daily>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val date = dailyForecast.get(position).dt.toLong().let { convertDate(it) }
         val temp = dailyForecast.get(position).temp?.let { getTempForecast(it) }
-        val weather = dailyForecast.get(position).weather?.get(0).main
+        val weather = dailyForecast.get(position).weather.get(0).main
 
         holder.date?.text = date
         holder.temperature?.text = temp

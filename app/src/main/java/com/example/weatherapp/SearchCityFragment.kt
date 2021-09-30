@@ -18,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchCityFragment : Fragment() {
 
     private var citiesList: ArrayList<CitiesResponse>? = arrayListOf()
+    lateinit var citiesListView: ListView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,23 +33,13 @@ class SearchCityFragment : Fragment() {
     }
 
     private fun initView(view: View) {
-        val citiesListView: ListView = view.findViewById(R.id.citiesList)
         val searchCity: SearchView = view.findViewById(R.id.searchCity)
+        citiesListView = view.findViewById(R.id.citiesList)
+
 
         searchCity.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(searchString: String?): Boolean {
                 getCurrentData(searchString)
-                if (citiesList?.size != 0) {
-                    val citiesArray: ArrayList<String> = arrayListOf()
-                    for (city in citiesList!!) {
-                        getCurrentData(searchString)
-                        city.localNames?.get("ru")?.let { citiesArray.add(it) }
-                    }
-                    val adapter: ArrayAdapter<String>? = activity?.let { ArrayAdapter<String>(it.baseContext, android.R.layout.simple_list_item_1, citiesArray) }
-                    citiesListView.adapter = adapter
-                } else {
-                    Toast.makeText(activity?.baseContext, "No match found", Toast.LENGTH_SHORT).show()
-                }
                 return false
             }
             override fun onQueryTextChange(searchString: String?): Boolean {
@@ -56,9 +47,9 @@ class SearchCityFragment : Fragment() {
             }
         })
 
-        citiesListView.setOnClickListener{
+/*        citiesListView.setOnClickListener{
 
-        }
+        }*/
     }
 
     private fun getCurrentData(cityName: String?) {
@@ -77,9 +68,20 @@ class SearchCityFragment : Fragment() {
                 if (response.code() == 200) {
                     val citiesInfo = response.body()!!
                     citiesList = citiesInfo
+//
+                    if (citiesList?.size != 0) {
+                        val citiesArray: ArrayList<String> = arrayListOf()
+                        for (city in citiesList!!) {
+                            city.localNames?.get("ru")?.let { citiesArray.add(it) }
+                        }
+                        val adapter: ArrayAdapter<String>? = activity?.let { ArrayAdapter<String>(it.baseContext, android.R.layout.simple_list_item_1, citiesArray) }
+                        citiesListView.adapter = adapter
+                    } else {
+                        Toast.makeText(activity?.baseContext, "No match found", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-
+            //
             override fun onFailure(call: Call<ArrayList<CitiesResponse>>, t: Throwable) {
             }
         }

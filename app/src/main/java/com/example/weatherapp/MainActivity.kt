@@ -20,7 +20,7 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var weatherForecast: WeatherForecast? = null
+    lateinit var weatherForecast: WeatherForecast
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var latitude: Float? = null
     private var longitude: Float? = null
@@ -61,15 +61,16 @@ class MainActivity : AppCompatActivity() {
         val currentCity: TextView = findViewById(R.id.cityName)
 
         dailyForecast.layoutManager = LinearLayoutManager(this)
-        dailyForecast.adapter = weatherForecast?.dailyForecast?.let { ForecastAdapter(it) }
+        dailyForecast.adapter = weatherForecast.getDailyForecast()?.let { ForecastAdapter(it) }
         currentCity.setText(latitude?.let { longitude?.let { it1 -> getCurrentCityName(it.toDouble(), it1.toDouble()) } })
-        weatherForecast?.getCurrentTemperature()?.toString().let { currentTempView.setText(it) }
-        weatherForecast?.getMinMaxTemperature().let { minMaxTempView.setText(it) }
-        weatherForecast?.getCurrentWeather().let { currentWeather.setText(it) }
+        weatherForecast.getCurrentTemperature()?.toString().let { currentTempView.setText(it) }
+        weatherForecast.getMinMaxTemperature().let { minMaxTempView.setText(it) }
+        weatherForecast.getCurrentWeather().let { currentWeather.setText(it) }
 
         currentCity.setOnClickListener{
             val citySearch = Intent()
             citySearch.setClass(this, SearchCity::class.java)
+            citySearch.putExtra("WEATHER_FORECAST", weatherForecast)
             startActivity(citySearch)
         }
     }
@@ -89,7 +90,9 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.code() == 200) {
                     val currentData = response.body()!!
-                    weatherForecast = WeatherForecast(currentData.current, currentData.daily)
+                    weatherForecast = WeatherForecast(latitude, longitude)
+                    weatherForecast?.setCurrentWeather(currentData.current)
+                    weatherForecast?.setDailyForecast(currentData.daily)
                     initView()
                 }
             }
