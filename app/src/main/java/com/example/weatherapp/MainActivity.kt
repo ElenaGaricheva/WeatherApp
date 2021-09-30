@@ -2,6 +2,7 @@ package com.example.weatherapp
 
 import android.annotation.SuppressLint
 import android.Manifest.permission.*
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
@@ -16,6 +17,7 @@ import com.google.android.gms.location.LocationServices
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import android.location.Geocoder
+import android.os.Parcelable
 import java.util.*
 
 
@@ -71,7 +73,17 @@ class MainActivity : AppCompatActivity() {
             val citySearch = Intent()
             citySearch.setClass(this, SearchCity::class.java)
             citySearch.putExtra("WEATHER_FORECAST", weatherForecast)
-            startActivity(citySearch)
+            startActivityForResult(citySearch, 99)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != 99) {
+            super.onActivityResult(requestCode, resultCode, data)
+            return
+        }
+        if (resultCode == RESULT_OK) {
+            weatherForecast = data?.getParcelableExtra<Parcelable>("WEATHER_FORECAST") as WeatherForecast
         }
     }
 

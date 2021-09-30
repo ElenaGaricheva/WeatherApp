@@ -5,21 +5,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.SearchView
-import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import android.app.Activity
+import android.widget.*
+import androidx.core.view.get
+import java.lang.ClassCastException
+
 
 class SearchCityFragment : Fragment() {
 
     private var citiesList: ArrayList<CitiesResponse>? = arrayListOf()
     lateinit var citiesListView: ListView
 
+    interface OnSomeEventListener {
+        fun searchFinish(lat: Float?, lon: Float?)
+    }
+
+    var someEventListener: OnSomeEventListener? = null
+
+    override fun onAttach(activity: Activity) {
+        super.onAttach(activity)
+        someEventListener = try {
+            activity as OnSomeEventListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$activity must implement onSomeEventListener")
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,9 +62,10 @@ class SearchCityFragment : Fragment() {
             }
         })
 
-/*        citiesListView.setOnClickListener{
-
-        }*/
+        citiesListView.onItemClickListener =
+            AdapterView.OnItemClickListener { _, view, _, _ ->
+                someEventListener?.searchFinish(citiesList?.get(0)?.lat, citiesList?.get(0)?.lon)
+            }
     }
 
     private fun getCurrentData(cityName: String?) {
