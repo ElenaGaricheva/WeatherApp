@@ -22,16 +22,16 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var weatherForecast: WeatherForecast
+    private var weatherForecast: WeatherForecast = WeatherForecast(0f,0f)
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private var latitude: Float? = null
-    private var longitude: Float? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        fetchLocation()
+        if (weatherForecast.latWeather == 0f && weatherForecast.lonWeather == 0f){
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+            fetchLocation()
+        }else getCurrentData()
     }
 
     private fun fetchLocation(){
@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity() {
         }
         task.addOnSuccessListener {
             if (it != null){
-                latitude = it.latitude.toFloat()
-                longitude = it.longitude.toFloat()
+                weatherForecast.latWeather = it.latitude.toFloat()
+                weatherForecast.lonWeather = it.longitude.toFloat()
                 getCurrentData()
             }
 
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
         dailyForecast.layoutManager = LinearLayoutManager(this)
         dailyForecast.adapter = weatherForecast.getDailyForecast()?.let { ForecastAdapter(it) }
-        currentCity.setText(latitude?.let { longitude?.let { it1 -> getCurrentCityName(it.toDouble(), it1.toDouble()) } })
+        currentCity.setText(weatherForecast.latWeather?.let { weatherForecast.lonWeather?.let { it1 -> getCurrentCityName(it.toDouble(), it1.toDouble()) } })
         weatherForecast.getCurrentTemperature()?.toString().let { currentTempView.setText(it) }
         weatherForecast.getMinMaxTemperature().let { minMaxTempView.setText(it) }
         weatherForecast.getCurrentWeather().let { currentWeather.setText(it) }
@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
         if (resultCode == RESULT_OK) {
             weatherForecast = data?.getParcelableExtra<Parcelable>("WEATHER_FORECAST") as WeatherForecast
+            getCurrentData()
         }
     }
 
@@ -94,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             .build()
             .create(WeatherService::class.java)
 
-        val call = retrofit.getCurrentWeather(latitude, longitude, exclude, AppId)
+        val call = retrofit.getCurrentWeather(weatherForecast.latWeather, weatherForecast.lonWeather, exclude, AppId)
         call.enqueue(object : Callback<WeatherResponse> {
             override fun onResponse(
                 call: Call<WeatherResponse>,
@@ -102,7 +103,6 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.code() == 200) {
                     val currentData = response.body()!!
-                    weatherForecast = WeatherForecast(latitude, longitude)
                     weatherForecast?.setCurrentWeather(currentData.current)
                     weatherForecast?.setDailyForecast(currentData.daily)
                     initView()
