@@ -48,6 +48,8 @@ class WeatherForecast(
         }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        latWeather?.let { parcel.writeFloat(it) }
+        lonWeather?.let { parcel.writeFloat(it)}
     }
 
     override fun describeContents(): Int {
